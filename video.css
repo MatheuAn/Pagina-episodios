@@ -70,7 +70,7 @@ h3{
   height:96%;
   color:white;
   z-index:3;
-  opacity:0;
+  opacity:1;
   transition: opacity 0.3s ease;
 }
 #controlsplayer:hover{
@@ -116,9 +116,10 @@ h3{
 
 .superiorpart img {
   object-fit: cover;
-  width: 100px;
-  height: auto;
-  max-height: 20px;
+  max-width: 160px;
+  width:auto;
+  height: 20px;
+  
 }
 .superiorpart button{
   display:flex;
