@@ -6,79 +6,39 @@ function toggledowbpp(t){t.classList.toggle("active");var e=document.getElementB
 
 
 // Like e deslike 
-document.addEventListener('DOMContentLoaded', function() {
-  function toggleActive(button) {
-    var buttons = button.parentNode.getElementsByTagName('button');
+ document.addEventListener("DOMContentLoaded", function() {
+   const likeppSpans = document.querySelectorAll('.likepp');
 
-    for (var i = 0; i < buttons.length; i++) {
-      buttons[i].classList.remove('active');
-    }
+   likeppSpans.forEach(function(span) {
+     const storedDataId = localStorage.getItem(span.dataset.id);
 
-    button.classList.add('active');
-    localStorage.setItem('activeButtonId', button.id);
-  }
-  var activeButtonId = localStorage.getItem('activeButtonId');
-  var activeButton = document.getElementById(activeButtonId);
-  if (activeButton) {
-    activeButton.classList.add('active');
-  }
-  var likeButton = document.getElementById('likepp');
-  var dislikeButton = document.getElementById('deslikepp');
+     if (storedDataId) {
+       const buttons = span.querySelectorAll('button');
+       buttons.forEach(function(btn) {
+         if (btn.dataset.id === storedDataId) {
+           btn.classList.add('active');
+         }
+       });
+     }
+   });
+ });
 
-  likeButton.addEventListener('click', function() {
-    toggleActive(this);
-  });
+ function toggleActive(button) {
+   const span = button.parentNode;
+   const buttons = span.querySelectorAll('button');
 
-  dislikeButton.addEventListener('click', function() {
-    toggleActive(this);
-  });
-  var listas = document.querySelectorAll("ul[data-id]");
-
-  listas.forEach(function (lista) {
-    var listaItems = lista.querySelectorAll("li");
-
-    listaItems.forEach(function (item) {
-      item.addEventListener("click", function () {
-        this.classList.toggle("visto");
-        saveVistoState(lista);
-        updateVistosCount(lista);
-      });
-
-      restoreVistoState(lista, item);
-    });
-
-    updateVistosCount(lista);
-  });
-
-  function saveVistoState(lista) {
-    var vistoArray = [];
-
-    lista.querySelectorAll("li").forEach(function (item, index) {
-      if (item.classList.contains("visto")) {
-        vistoArray.push(index);
-      }
-    });
-
-    localStorage.setItem("vistoArray_" + lista.dataset.id, JSON.stringify(vistoArray));
-  }
-
-  function restoreVistoState(lista, item) {
-    var vistoArray = JSON.parse(localStorage.getItem("vistoArray_" + lista.dataset.id)) || [];
-
-    vistoArray.forEach(function (index) {
-      lista.querySelectorAll("li")[index].classList.add("visto");
-    });
-  }
-
-  function updateVistosCount(lista) {
-    var vistosCount = lista.querySelectorAll("li.visto").length;
-    var spanVistos = document.getElementById("lidospm");
-    
-    if (spanVistos) {
-      spanVistos.textContent = vistosCount;
-    }
-  }
-});
+   buttons.forEach(function(btn) {
+     if (btn === button) {
+       btn.classList.add('active');
+       localStorage.setItem(span.dataset.id, btn.dataset.id);
+     } else {
+       btn.classList.remove('active');
+     }
+   });
+ }
+ 
+ 
+ 
   //iframe
   function resizeIframe(iframe) {
     // Aguarde o carregamento do iframe
