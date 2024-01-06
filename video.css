@@ -22,8 +22,57 @@ h3{
   align-items: center;
   z-index: 1;
   overflow: hidden;
+  
 }
 
+.secvideo::after,
+.secvideo::before{
+  content:"\ea50";
+  font-family:material symbols outlined;
+  position:absolute;
+  top:0%;
+  left:0%;
+  width:50%;
+  height:100%;
+  display:flex;align-items:center;
+  justify-content: center;
+  z-index:10;
+  display:none;
+  pointer-events:none;
+  font-size:2.5em;
+  color: rgba(255,255,255,0.5);
+  animation: clicktime 0.5s ease forwards;
+}
+@keyframes clicktime{
+  0%{
+    opacity:0;
+  }
+  50%{
+    opacity:1;
+  }
+  100%{
+    opacity:0;
+  }
+}
+
+
+.secvideo::after {
+  left: unset;
+  right: 0;
+}
+
+.onoff{
+  display:flex;
+}
+
+
+.secvideo.onright::after{
+  display:flex;
+}
+.secvideo.onleft::before{
+  display:flex;
+  transform:rotate(180deg);
+}
 
 
 .secvideo video {
@@ -72,9 +121,6 @@ h3{
   z-index:3;
   opacity:1;
   transition: opacity 0.3s ease;
-}
-#controlsplayer:hover{
-  opacity:1;
 }
 
 #controlsplayer.controloff::before,
@@ -249,6 +295,32 @@ width:60px;
 .morebtn{
   gap:10px;
   display:flex;
+}
+
+.morebtn.off{
+  opacity:unset;
+  pointer-events: unset;
+  cursor:unset;
+}
+.morebtn.offv #qualidade,
+.morebtn.off #volumepp{
+  display:none;
+}
+
+.morebtn.offv #fullcontrols{
+  margin-left:auto;
+}
+
+@media screen and (min-width:400px){
+  .morebtn.offv #qualidade,
+  .morebtn.off #volumepp {
+    display: flex!important;
+  }
+
+  
+  .morebtn.offv #fullcontrols {
+    margin-left: unset!important;
+  }
 }
 .endpart button{
   border:none;
