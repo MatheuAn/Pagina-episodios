@@ -1,3 +1,118 @@
+//controlsplyer
+document.addEventListener('DOMContentLoaded', function () {
+  var lastClickTime = 0;
+  var removeClassesTimeout;
+
+  var controlsPlayer = document.getElementById('controlsplayer');
+  var secvideo = document.querySelector('.secvideo');
+
+  controlsPlayer.addEventListener('click', function (event) {
+    var clickedElement = event.target;
+
+    // Calcular o intervalo de tempo desde o último clique
+    var currentTime = new Date().getTime();
+    var clickInterval = currentTime - lastClickTime;
+    lastClickTime = currentTime;
+
+    // Verificar se o elemento clicado é um elemento clicável e o intervalo de tempo entre cliques é suficiente
+    if (!isClickableElement(clickedElement) && clickInterval > 300) {
+      // Alternar a classe controloff no controlsplayer
+      controlsPlayer.classList.toggle('controloff');
+
+      // Verificar se o controlsplayer tem a classe controloff e adicionar a classe onoff em secvideo
+      if (controlsPlayer.classList.contains('controloff')) {
+        secvideo.classList.add('onoff');
+      } else {
+        secvideo.classList.remove('onoff');
+      }
+
+      // Remover as classes onleft e onright após 300 segundos se não houver mais duplo clique
+      clearTimeout(removeClassesTimeout);
+      removeClassesTimeout = setTimeout(function () {
+        secvideo.classList.remove('onleft', 'onright');
+      }, 300000); // 300000 milissegundos = 300 segundos
+    }
+  });
+
+  function isClickableElement(element) {
+    // Verificar se o elemento clicado é um elemento clicável (botão, imagem, etc.)
+    return (
+      element.tagName === 'BUTTON' ||
+      element.tagName === 'IMG' ||
+      element.tagName === 'A' ||
+      element.tagName === 'INPUT' ||
+      element.hasAttribute('onclick') ||
+      element.hasAttribute('href') ||
+      element.hasAttribute('type')
+    );
+  }
+});
+
+// Avançar e voltar seg
+document.addEventListener('DOMContentLoaded', function () {
+  var video = document.getElementById('myVideo');
+  var minussegBtn = document.getElementById('minusseg');
+  var moresegBtn = document.getElementById('moreseg');
+  var controlsPlayer = document.getElementById('controlsplayer');
+  var secvideo = document.querySelector('.secvideo');
+
+  controlsPlayer.addEventListener('dblclick', function (event) {
+    // Verificar se o clique foi em um botão dentro do controlsplayer
+    if (event.target.tagName === 'BUTTON') {
+      return;
+    }
+
+    // Remover ambas as classes antes de adicionar a nova
+    secvideo.classList.remove('onleft', 'onright');
+
+    // Verificar se o clique foi no lado direito ou esquerdo
+    var x = event.clientX;
+    var middle = controlsPlayer.offsetWidth / 2;
+
+    if (x > middle) {
+      // Duplo clique do lado direito, acionar moresegBtn e adicionar a classe .active e .onright
+      moresegBtn.click();
+      moresegBtn.classList.add('active');
+      secvideo.classList.add('onright');
+
+      // Remover a classe .active após 1000 milissegundos (1 segundo)
+      setTimeout(function () {
+        moresegBtn.classList.remove('active');
+      }, 1000);
+    } else {
+      // Duplo clique do lado esquerdo, acionar minussegBtn e adicionar a classe .active e .onleft
+      minussegBtn.click();
+      minussegBtn.classList.add('active');
+      secvideo.classList.add('onleft');
+
+      // Remover a classe .active após 1000 milissegundos (1 segundo)
+      setTimeout(function () {
+        minussegBtn.classList.remove('active');
+      }, 1000);
+    }
+  });
+
+  minussegBtn.addEventListener('click', function () {
+    skip(-10); // Retroceder 10 segundos
+  });
+
+  moresegBtn.addEventListener('click', function () {
+    skip(10); // Avançar 10 segundos
+  });
+
+  function skip(duration) {
+    video.currentTime += duration;
+  }
+});
+
+
+
+
+
+
+
+
+// Progressão 
 const video = document.querySelector("video");
 const progressaoInput = document.querySelector(".progressao");
 let isSeeking = false;
@@ -24,33 +139,6 @@ progressaoInput.addEventListener("mouseup", function() {
 
 
 
-//controlsplyer
-document.addEventListener('DOMContentLoaded', function () {
-  var controlsPlayer = document.getElementById('controlsplayer');
-
-  controlsPlayer.addEventListener('click', function (event) {
-    var clickedElement = event.target;
-
-    // Verificar se o elemento clicado é um elemento clicável
-    if (!isClickableElement(clickedElement)) {
-      // Alternar a classe controloff no controlsplayer
-      controlsPlayer.classList.toggle('controloff');
-    }
-  });
-
-  function isClickableElement(element) {
-    // Verificar se o elemento clicado é um elemento clicável (botão, imagem, etc.)
-    return (
-      element.tagName === 'BUTTON' ||
-      element.tagName === 'IMG' ||
-      element.tagName === 'A' ||
-      element.tagName === 'INPUT' ||
-      element.hasAttribute('onclick') ||
-      element.hasAttribute('href') ||
-      element.hasAttribute('type')
-    );
-  }
-});
 
 
 
@@ -65,6 +153,8 @@ function toggleMute() {
   } else {
     volumeBtn.classList.add('notvol');
   }
+  moreBtn.classList.toggle('offv', volumeBtn.classList.contains('notvol'));
+  
 }
 
 
@@ -151,63 +241,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-//avançar e voltar seg
-document.addEventListener('DOMContentLoaded', function () {
-  var video = document.getElementById('myVideo');
-  var minussegBtn = document.getElementById('minusseg');
-  var moresegBtn = document.getElementById('moreseg');
-  var controlsPlayer = document.getElementById('controlsplayer');
-
-  var isButton = function (element) {
-    return element.tagName.toLowerCase() === 'button';
-  };
-
-  controlsPlayer.addEventListener('dblclick', function (event) {
-    // Verificar se o clique foi em um botão dentro do controlsplayer
-    if (isButton(event.target)) {
-      return;
-    }
-
-    // Verificar se o clique foi no lado direito ou esquerdo
-    var x = event.clientX;
-    var middle = controlsPlayer.offsetWidth / 2;
-
-    if (x > middle) {
-      // Duplo clique do lado direito, acionar moresegBtn e adicionar a classe .active
-      moresegBtn.click();
-      moresegBtn.classList.add('active');
-      minussegBtn.classList.remove('active'); // Remover a classe .active de minussegBtn
-
-      // Remover a classe .active após 300 segundos (5 minutos)
-      setTimeout(function () {
-        moresegBtn.classList.remove('active');
-      }, 100);
-    } else {
-      // Duplo clique do lado esquerdo, acionar minussegBtn e adicionar a classe .active
-      minussegBtn.click();
-      minussegBtn.classList.add('active');
-      moresegBtn.classList.remove('active'); // Remover a classe .active de moresegBtn
-
-      // Remover a classe .active após 300 segundos (5 minutos)
-      setTimeout(function () {
-        minussegBtn.classList.remove('active');
-      }, 100);
-    }
-  });
-
-  minussegBtn.addEventListener('click', function () {
-    skip(-10); // Retroceder 10 segundos
-  });
-
-  moresegBtn.addEventListener('click', function () {
-    skip(10); // Avançar 10 segundos
-  });
-
-  function skip(duration) {
-    video.currentTime += duration;
-  }
-});
-
 
 
 
@@ -287,12 +320,16 @@ function changeSource(element) {
 
 // qualidade button
 const qualidadeBtn = document.getElementById('qualidade');
+const moreBtn = document.querySelector('.morebtn');
+
 
 qualidadeBtn.addEventListener('click', toggleMoreqClass);
 
 function toggleMoreqClass() {
   // Adiciona ou remove a classe moreq no #qualidade
   qualidadeBtn.classList.toggle('moreq');
+  moreBtn.classList.toggle('off', qualidadeBtn.classList.contains('moreq'));
+
 
   // Encontrar todos os elementos h3 após #qualidade
   const h3Elements = document.querySelectorAll('#qualidade.moreq + h3');
@@ -506,3 +543,7 @@ document.addEventListener("fullscreenchange", () => {
   }
 });
 
+
+
+
+//iframe
