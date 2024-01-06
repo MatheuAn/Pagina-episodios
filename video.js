@@ -1,41 +1,34 @@
-//controlsplyer
 document.addEventListener('DOMContentLoaded', function () {
-  var lastClickTime = 0;
-  var removeClassesTimeout;
-
   var controlsPlayer = document.getElementById('controlsplayer');
-  var secvideo = document.querySelector('.secvideo');
+  var secVideo = document.querySelector('.secvideo');
+  var timeoutId;
 
-  controlsPlayer.addEventListener('click', function (event) {
+  document.addEventListener('click', function (event) {
     var clickedElement = event.target;
 
-    // Calcular o intervalo de tempo desde o último clique
-    var currentTime = new Date().getTime();
-    var clickInterval = currentTime - lastClickTime;
-    lastClickTime = currentTime;
-
-    // Verificar se o elemento clicado é um elemento clicável e o intervalo de tempo entre cliques é suficiente
-    if (!isClickableElement(clickedElement) && clickInterval > 300) {
-      // Alternar a classe controloff no controlsplayer
+    if (!isClickableElement(clickedElement)) {
       controlsPlayer.classList.toggle('controloff');
+    }
+  });
 
-      // Verificar se o controlsplayer tem a classe controloff e adicionar a classe onoff em secvideo
-      if (controlsPlayer.classList.contains('controloff')) {
-        secvideo.classList.add('onoff');
-      } else {
-        secvideo.classList.remove('onoff');
-      }
+  document.addEventListener('dblclick', function (event) {
+    var clickedElement = event.target;
 
-      // Remover as classes onleft e onright após 300 segundos se não houver mais duplo clique
-      clearTimeout(removeClassesTimeout);
-      removeClassesTimeout = setTimeout(function () {
-        secvideo.classList.remove('onleft', 'onright');
-      }, 300000); // 300000 milissegundos = 300 segundos
+    if (!isClickableElement(clickedElement)) {
+      secVideo.classList.add('duplo');
+
+      // Limpar temporizador se existir
+      clearTimeout(timeoutId);
+
+      // Configurar temporizador para remover a classe após 1 segundo
+      timeoutId = setTimeout(function () {
+        secVideo.classList.remove('duplo');
+        controlsPlayer.classList.add('controloff'); // Adicionar .controloff
+      }, 1000);
     }
   });
 
   function isClickableElement(element) {
-    // Verificar se o elemento clicado é um elemento clicável (botão, imagem, etc.)
     return (
       element.tagName === 'BUTTON' ||
       element.tagName === 'IMG' ||
@@ -48,47 +41,59 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 });
 
-// Avançar e voltar seg
+
+
+
+
+//avançar e voltar seg
 document.addEventListener('DOMContentLoaded', function () {
   var video = document.getElementById('myVideo');
   var minussegBtn = document.getElementById('minusseg');
   var moresegBtn = document.getElementById('moreseg');
   var controlsPlayer = document.getElementById('controlsplayer');
-  var secvideo = document.querySelector('.secvideo');
+  var secVideo = document.querySelector('.secvideo');
+  var isButton = function (element) {
+    return element.tagName.toLowerCase() === 'button';
+  };
 
   controlsPlayer.addEventListener('dblclick', function (event) {
     // Verificar se o clique foi em um botão dentro do controlsplayer
-    if (event.target.tagName === 'BUTTON') {
+    if (isButton(event.target)) {
       return;
     }
-
-    // Remover ambas as classes antes de adicionar a nova
-    secvideo.classList.remove('onleft', 'onright');
 
     // Verificar se o clique foi no lado direito ou esquerdo
     var x = event.clientX;
     var middle = controlsPlayer.offsetWidth / 2;
 
     if (x > middle) {
-      // Duplo clique do lado direito, acionar moresegBtn e adicionar a classe .active e .onright
+      // Duplo clique do lado direito, acionar moresegBtn e adicionar a classe .active
       moresegBtn.click();
       moresegBtn.classList.add('active');
-      secvideo.classList.add('onright');
+      minussegBtn.classList.remove('active'); // Remover a classe .active de minussegBtn
 
-      // Remover a classe .active após 1000 milissegundos (1 segundo)
+      // Adicionar a classe .onright em secVideo
+      secVideo.classList.add('onright');
+
+      // Remover a classe .active e .onright após 300 segundos (5 minutos)
       setTimeout(function () {
         moresegBtn.classList.remove('active');
-      }, 1000);
+        secVideo.classList.remove('onright');
+      }, 100);
     } else {
-      // Duplo clique do lado esquerdo, acionar minussegBtn e adicionar a classe .active e .onleft
+      // Duplo clique do lado esquerdo, acionar minussegBtn e adicionar a classe .active
       minussegBtn.click();
       minussegBtn.classList.add('active');
-      secvideo.classList.add('onleft');
+      moresegBtn.classList.remove('active'); // Remover a classe .active de moresegBtn
 
-      // Remover a classe .active após 1000 milissegundos (1 segundo)
+      // Adicionar a classe .onleft em secVideo
+      secVideo.classList.add('onleft');
+
+      // Remover a classe .active e .onleft após 300 segundos (5 minutos)
       setTimeout(function () {
         minussegBtn.classList.remove('active');
-      }, 1000);
+        secVideo.classList.remove('onleft');
+      }, 100);
     }
   });
 
@@ -104,8 +109,6 @@ document.addEventListener('DOMContentLoaded', function () {
     video.currentTime += duration;
   }
 });
-
-
 
 
 
