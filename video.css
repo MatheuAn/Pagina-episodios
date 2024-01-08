@@ -40,7 +40,7 @@ h3{
   display:none;
   pointer-events:none;
   font-size:2.5em;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,1);
   animation: clicktime 0.5s ease forwards;
 }
 @keyframes clicktime{
@@ -97,7 +97,7 @@ h3{
   width:100%;object-fit:cover;
   height:100%;
 }
-
+#controlsplayer::after,
 #controlsplayer::before{
   content:"";
   position: absolute;
@@ -110,7 +110,9 @@ h3{
   opacity:0.6;
   transition: opacity 0.3s ease;
 }
-
+#controlsplayer::after{
+  opacity:0
+}
 #controlsplayer{
   position:absolute;
   top:2%;
@@ -129,6 +131,15 @@ h3{
   opacity: 0;
   pointer-events:none;
   transition: opacity 0.3s ease;
+}
+
+.secvideo.duplo #controlsplayer::before,
+.secvideo.duplo #controlsplayer span,
+.secvideo.duplo #controlsplayer button {
+  opacity:0;
+}
+.secvideo.duplo #controlsplayer::after{
+  opacity:0.4
 }
 
 .superiorpart{
