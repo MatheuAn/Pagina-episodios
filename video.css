@@ -322,7 +322,7 @@ width:60px;
   margin-left:auto;
 }
 
-@media screen and (min-width:400px){
+@media screen and (min-width:500px){
   .morebtn.offv #qualidade,
   .morebtn.off #volumepp {
     display: flex!important;
